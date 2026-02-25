@@ -1,23 +1,25 @@
 import streamlit as st
 import pandas as pd
 from core.demo_db import demo_select_df
+import plotly.express as px
 
-st.title("Reply User Distribution")
 
 
+st.title("📊 Statistic of Douban User")
+
+st.markdown("<br>", unsafe_allow_html=True)
+st.subheader("Reply User Distribution")
 
 kpi_df = demo_select_df(
     """
     SELECT
-        COUNT(*) AS total_users,
+        COUNT(DISTINCT user_id) AS total_users,
         COALESCE(SUM(reply_count), 0) AS total_replies,
         COALESCE(MAX(reply_count), 0) AS max_reply
     FROM demo_reply_users_distribution
     """
 )
-st.dataframe(kpi_df)
-
-
+#st.dataframe(kpi_df)     #table
 
 total_users = int(kpi_df["total_users"][0])
 total_replies = int(kpi_df["total_replies"][0])
@@ -26,24 +28,51 @@ max_reply = int(kpi_df["max_reply"][0])
 
 col1, col2, col3 = st.columns(3)
 
-col1.metric("Total Users", total_users)
+col1.metric("Total Group Members", total_users)
 col2.metric("Total Replies", total_replies)
-col3.metric("Top User Replies", max_reply)
+col3.metric("Top Members Replies", max_reply)
 
-min_replies = st.slider("Minimum reply count", 1, 200, 10)
+st.divider()
+#st.markdown("<br>", unsafe_allow_html=True)
 
-chart_query = demo_select_df(f"""
-SELECT user_name, reply_count
-FROM demo_reply_users_distribution
-WHERE reply_count >= {min_replies}
-ORDER BY reply_count DESC
-LIMIT 20
-""")
+st.subheader("Low Rating User Distribution")
 
-st.bar_chart(chart_query.set_index("user_name"))
+df1 = demo_select_df(
+    """
+    SELECT *
+    FROM demo_lowrating_users_distribution
+    ORDER BY user_cnt DESC
+    LIMIT 20
+    """ 
+)
+fig = px.bar(
+    df1,
+    x="user_cnt",
+    y="group_name",  
+    hover_data=["group_who"],
+)
+st.plotly_chart(fig, use_container_width=True)
+st.divider()
+#st.markdown("<br>", unsafe_allow_html=True)
 
+st.subheader("Low Rating User Distribution by High Rating Drama")
 
-
+df2 = demo_select_df(
+    """
+    SELECT 
+    high_rating_user_count AS user_cnt,
+    drama_name
+    FROM demo_high_rating_dramas_source_zhaoxuelu
+    ORDER BY high_rating_user_count DESC
+    LIMIT 20
+    """ 
+)
+fig = px.bar(
+    df2,
+    x="user_cnt",
+    y="drama_name",  
+)
+st.plotly_chart(fig, use_container_width=True)
 
 
 

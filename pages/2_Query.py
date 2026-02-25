@@ -9,7 +9,7 @@ st.title("🔎 Query")
 tab1, tab2 = st.tabs(["Reply users", "Low-rating users"])
 
 with tab1:
-    st.subheader("Lookup in demo_reply_users_distribution")
+    st.subheader("Lookup in Reply User Membership")
     user_id = st.text_input("user_id", placeholder="e.g. 239300232", key="reply_uid")
 
     if user_id:
@@ -25,19 +25,5 @@ with tab1:
     else:
         st.caption("Enter a user_id to query.")
 
-with tab2:
-    st.subheader("Lookup in demo_lowrating_users_distribution")
-    user_id2 = st.text_input("user_id", placeholder="e.g. 239300232", key="low_uid")
-
-    if user_id2:
-        df2 = demo_select_df(
-            """
-            SELECT *
-            FROM demo_lowrating_users_distribution
-            WHERE user_id = ?
-            """,
-            params=[user_id2],
-        )
-        st.dataframe(df2, use_container_width=True)
-    else:
-        st.caption("Enter a user_id to query.")
+#with tab2:
+  

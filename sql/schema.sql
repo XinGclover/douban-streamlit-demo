@@ -16,12 +16,16 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+DROP TABLE IF EXISTS public.demo_reply_users_distribution;
+DROP TABLE IF EXISTS public.demo_member_groups;
+DROP TABLE IF EXISTS public.demo_lowrating_users_distribution;
+DROP TABLE IF EXISTS public.demo_high_rating_dramas_source_zhaoxuelu;
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
 --
--- Name: demo_high_rating_dramas_source_zhaoxuelu; Type: TABLE; Schema: public; Owner: cindy
+-- Name: demo_high_rating_dramas_source_zhaoxuelu; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.demo_high_rating_dramas_source_zhaoxuelu (
@@ -31,10 +35,8 @@ CREATE TABLE public.demo_high_rating_dramas_source_zhaoxuelu (
 );
 
 
-ALTER TABLE public.demo_high_rating_dramas_source_zhaoxuelu OWNER TO cindy;
-
 --
--- Name: demo_lowrating_users_distribution; Type: TABLE; Schema: public; Owner: cindy
+-- Name: demo_lowrating_users_distribution; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.demo_lowrating_users_distribution (
@@ -45,10 +47,20 @@ CREATE TABLE public.demo_lowrating_users_distribution (
 );
 
 
-ALTER TABLE public.demo_lowrating_users_distribution OWNER TO cindy;
+--
+-- Name: demo_member_groups; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.demo_member_groups (
+    member_id character varying(20),
+    member_name text,
+    group_names text[],
+    group_whos text[]
+);
+
 
 --
--- Name: demo_reply_users_distribution; Type: TABLE; Schema: public; Owner: cindy
+-- Name: demo_reply_users_distribution; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.demo_reply_users_distribution (
@@ -56,11 +68,10 @@ CREATE TABLE public.demo_reply_users_distribution (
     user_name text,
     reply_count bigint,
     rnk bigint,
-    group_names text[]
+    group_names text[],
+    group_whos text[]
 );
 
-
-ALTER TABLE public.demo_reply_users_distribution OWNER TO cindy;
 
 --
 -- PostgreSQL database dump complete

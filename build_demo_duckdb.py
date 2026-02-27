@@ -4,12 +4,13 @@ import os
 from pathlib import Path
 import pandas as pd
 import duckdb
-from core.db import get_conn
+from core.postgresqldb import get_conn
 
 TABLES = [
     "demo_reply_users_distribution",
     "demo_lowrating_users_distribution",
     "demo_high_rating_dramas_source_zhaoxuelu",
+    "demo_member_groups",
 ]
 
 OUT_PATH = Path(__file__).resolve().parent / "demo.duckdb"

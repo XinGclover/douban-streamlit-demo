@@ -11,6 +11,7 @@ TABLES = [
     "demo_lowrating_users_distribution",
     "demo_high_rating_dramas_source_zhaoxuelu",
     "demo_member_groups",
+    "demo_zhaoxuelu_comments"
 ]
 
 OUT_PATH = Path(__file__).resolve().parent / "demo.duckdb"

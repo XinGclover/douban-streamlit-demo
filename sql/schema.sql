@@ -16,61 +16,43 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
-DROP TABLE IF EXISTS public.demo_reply_users_distribution;
-DROP TABLE IF EXISTS public.demo_member_groups;
-DROP TABLE IF EXISTS public.demo_lowrating_users_distribution;
-DROP TABLE IF EXISTS public.demo_high_rating_dramas_source_zhaoxuelu;
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
 
 --
--- Name: demo_high_rating_dramas_source_zhaoxuelu; Type: TABLE; Schema: public; Owner: -
+-- Name: demo_zhaoxuelu_comments; Type: TABLE; Schema: public; Owner: cindy
 --
 
-CREATE TABLE public.demo_high_rating_dramas_source_zhaoxuelu (
-    high_rating_drama_id character varying(20),
-    drama_name character varying(40),
-    high_rating_user_count bigint
+CREATE TABLE public.demo_zhaoxuelu_comments (
+    user_id character varying(20) NOT NULL,
+    user_name character varying(60),
+    votes integer,
+    status character varying(10),
+    rating integer,
+    user_location character varying(20),
+    create_time timestamp without time zone NOT NULL,
+    user_comment text,
+    insert_time timestamp without time zone DEFAULT now(),
+    batch_id text
 );
 
 
+ALTER TABLE public.demo_zhaoxuelu_comments OWNER TO cindy;
+
 --
--- Name: demo_lowrating_users_distribution; Type: TABLE; Schema: public; Owner: -
+-- Name: demo_zhaoxuelu_comments unique_zhaoxuelu_user_time; Type: CONSTRAINT; Schema: public; Owner: cindy
 --
 
-CREATE TABLE public.demo_lowrating_users_distribution (
-    group_id integer,
-    group_name text,
-    group_who text,
-    user_cnt bigint
-);
+ALTER TABLE ONLY public.demo_zhaoxuelu_comments
+    ADD CONSTRAINT unique_zhaoxuelu_user_time UNIQUE (user_id, create_time);
 
 
 --
--- Name: demo_member_groups; Type: TABLE; Schema: public; Owner: -
+-- Name: idx_user_zhaoxuelu; Type: INDEX; Schema: public; Owner: cindy
 --
 
-CREATE TABLE public.demo_member_groups (
-    member_id character varying(20),
-    member_name text,
-    group_names text[],
-    group_whos text[]
-);
-
-
---
--- Name: demo_reply_users_distribution; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.demo_reply_users_distribution (
-    user_id character varying(20),
-    user_name text,
-    reply_count bigint,
-    rnk bigint,
-    group_names text[],
-    group_whos text[]
-);
+CREATE INDEX idx_user_zhaoxuelu ON public.demo_zhaoxuelu_comments USING btree (user_id);
 
 
 --
